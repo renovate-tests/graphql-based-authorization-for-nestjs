@@ -41,7 +41,7 @@
     "tsc-watch": "4.0.0",
     "typescript": "3.7.2"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "./dist/index.js",
   "name": "graphql-based-authorization-for-nestjs",
   "repository": {
