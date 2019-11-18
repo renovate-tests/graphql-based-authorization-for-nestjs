@@ -1,10 +1,11 @@
 import {createHash} from "crypto";
 import {FindConditions, Repository} from "typeorm";
 
-import {Injectable} from "@nestjs/common";
+import {Injectable, ConflictException} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 
 import {UserEntity} from "./user.entity";
+import {IUserCreateFields} from "./interfaces";
 
 
 @Injectable()
@@ -29,6 +30,25 @@ export class UserService {
         password: this.createPasswordHash(password, email),
       },
     });
+  }
+
+  public async create(data: IUserCreateFields): Promise<UserEntity> {
+    let user = await this.findOne({email: data.email});
+
+    if (user) {
+      throw new ConflictException();
+    }
+
+    user = await this.userEntityRepository
+      .create({
+        ...data,
+        password: this.createPasswordHash(data.password, data.email),
+      })
+      .save();
+
+    delete user.password;
+
+    return user;
   }
 
   private createPasswordHash(password: string, salt: string): string {

@@ -4,14 +4,14 @@ import {UserRole} from "./interfaces";
 
 import {UserEntity} from "./user.entity";
 import {UserService} from "./user.service";
-import {UserListType} from "./types";
+import {UserListType, UserType} from "./types";
 
 
-@Resolver(() => UserEntity)
+@Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(_returns => UserEntity)
+  @Query(_returns => UserType)
   public profile(@User() user: UserEntity): UserEntity {
     return user;
   }

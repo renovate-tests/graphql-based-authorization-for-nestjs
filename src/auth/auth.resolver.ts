@@ -1,46 +1,42 @@
 import {Args, Mutation, Resolver} from "@nestjs/graphql";
-import {NotFoundException, UnauthorizedException} from "@nestjs/common";
 
-import {AuthTokens} from "./types";
+import {AuthType} from "./types";
 import {UserService} from "../user/user.service";
 import {Public} from "../common/decorators";
 import {AuthService} from "./auth.service";
-import {refreshTokenExpiresIn} from "./auth.constants";
+import {IAuth} from "./interfaces";
 
 
-const date = new Date();
-
-@Resolver(() => AuthTokens)
+@Resolver(() => AuthType)
 export class AuthResolver {
-  constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
-
-  @Public()
-  @Mutation(_returns => AuthTokens)
-  async login(@Args("email") email: string, @Args("password") password: string): Promise<AuthTokens> {
-    const user = await this.userService.getByCredentials(email, password);
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return this.authService.login(user);
+  constructor(private readonly authService: AuthService, private readonly userService: UserService) {
   }
 
   @Public()
-  @Mutation(_returns => AuthTokens)
-  async refreshToken(@Args("refreshToken") refreshToken: string): Promise<AuthTokens> {
-    const authEntity = await this.authService.findOne({refreshToken});
+  @Mutation(_returns => AuthType)
+  async login(@Args("email") email: string, @Args("password") password: string): Promise<IAuth> {
+    return this.authService.login({email, password});
+  }
 
-    if (!authEntity || new Date(authEntity.createdAt).getTime() - date.getTime() > refreshTokenExpiresIn) {
-      throw new NotFoundException();
-    }
-
-    return this.authService.login(authEntity.user);
+  @Public()
+  @Mutation(_returns => AuthType)
+  async refreshToken(@Args("refreshToken") refreshToken: string): Promise<IAuth> {
+    return this.authService.refresh({refreshToken});
   }
 
   @Mutation(_returns => Boolean)
   async logout(@Args("refreshToken") refreshToken: string): Promise<boolean> {
     await this.authService.delete({refreshToken});
     return true;
+  }
+
+  @Public()
+  @Mutation(_returns => AuthType)
+  async signup(
+    @Args("email") email: string,
+    @Args("password") password: string,
+  ): Promise<IAuth> {
+    const user = await this.userService.create({email, password});
+    return this.authService.loginUser(user);
   }
 }

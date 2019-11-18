@@ -1,6 +1,5 @@
 import {
   BaseEntity,
-  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -8,27 +7,25 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import {UserEntity} from "../user/user.entity";
-
+import {IAuth} from "./interfaces";
 
 @Entity({schema: "test", name: "auth"})
-export class AuthEntity extends BaseEntity {
+export class AuthEntity extends BaseEntity implements IAuth {
   @PrimaryGeneratedColumn()
   public id: number;
 
   @Column({type: "varchar"})
   public refreshToken: string;
 
+  @Column({type: "int"})
+  public refreshTokenExpiresAt: number;
+
+  public accessToken: string;
+
+  public accessTokenExpiresAt: number;
+
   @JoinColumn()
-  @OneToOne(_type => UserEntity, {
-    eager: true,
-  })
+  @OneToOne(_type => UserEntity)
   public user: UserEntity;
 
-  @Column({type: "timestamptz"})
-  public createdAt: string;
-
-  @BeforeInsert()
-  public beforeInsert(): void {
-    this.createdAt = new Date().toISOString();
-  }
 }

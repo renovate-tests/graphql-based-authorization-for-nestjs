@@ -2,7 +2,7 @@ import {Field, ObjectType} from "type-graphql";
 import {IAuth} from "../interfaces";
 
 @ObjectType()
-export class AuthTokens implements IAuth {
+export class AuthType implements IAuth {
   @Field()
   public accessToken: string;
 
