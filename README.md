@@ -1,16 +1,13 @@
-# GraphQL based authorization for Nest.js
+# GraphQL + JWT based authorization for Nest.js
 
-## Installation
+This is a code sample for my [article](https://trejgun.github.io/articles/graphql-based-authorization-for-nestjs)
+
+## Manual installation
 
 I assume you have node, yarn/npm and postgres
-otherwise you can use docker 
-
-```shell script
-docker-compose up --build
-```
-
 
 First of all you have to download dependencies
+
 ```bash
 npm i
 ```
@@ -28,13 +25,20 @@ npm run start
 or in production mode
 ```bash
 npm run build
-npm run start:prod
+npm run prod
 ```
 
+## Docker
+
+Otherwise you can use docker 
+
+```shell script
+docker-compose up --build
+```
 
 ## Usage 
 
-You can log in to the application using trejgun@gmail.com/My5up3r5tr0ngP@55w0rd by executing this CURL request
+You can log in to the application using **trejgun@gmail.com/My5up3r5tr0ngP@55w0rd** by executing this CURL request
 
 ```bash
 curl \
@@ -48,7 +52,7 @@ This will give you accessToken
 {"data":{"login":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRyZWpndW5AZ21haWwuY29tIiwiaWF0IjoxNTcyOTU3NzMwLCJleHAiOjE1NzMyNTc3MzB9.U3Fx9eYu-qSmPLjB0-2tbs8xouXGncwey4g9FYj5GHY","refreshToken":"5170b4a5-1cea-4d4e-868a-b42dd2aec1e2","accessTokenExpiresAt":1572957798255,"refreshTokenExpiresAt":1575549498255}}}
 ```
 
-which is valid for 5 minutes, after this time you can refresh it using
+which is valid for 5 minutes, after this time you have to refresh it using
 ```sh
 curl \
 -X POST http://127.0.0.1:3000/graphql \
@@ -60,7 +64,7 @@ curl \
 {"data":{"refreshToken":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRyZWpndW5AZ21haWwuY29tIiwiaWF0IjoxNTcyOTU3NjA0LCJleHAiOjE1NzMyNTc2MDR9.WSXXz20wbsOajwefbDQ7wb2tgdRLRby02AzhzfyDvjw","refreshToken":"72633d7f-2327-4508-940d-86780b3ba7b7","accessTokenExpiresAt":1572957798255,"refreshTokenExpiresAt":1575549498255}}}
 ```
 
-refreshToken is valid for 30 days, but can be destroyed manually or by admin
+refreshToken is valid for 30 days, but can be destroyed manually
 
 ```sh
  curl \
@@ -73,7 +77,7 @@ refreshToken is valid for 30 days, but can be destroyed manually or by admin
 {"data":{"logout":true}}
 ```
 
-Put this token in header of each of your subsequent requests
+Put this accessToken in header of each of your subsequent requests
 
 ```bash
 curl \
@@ -83,7 +87,7 @@ curl \
 -H "Content-Type: application/json"
 ```
 
-This will return your info
+This will return your profile
 ```json
 {"data":{"profile":{"id":1,"email":"trejgun@gmail.com","roles":["Admin"]}}}
 ```
