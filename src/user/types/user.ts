@@ -1,4 +1,3 @@
-import {BaseEntity} from "typeorm";
 import {Field, Int, ObjectType, registerEnumType} from "type-graphql";
 import {IUser, UserRole} from "../interfaces";
 
@@ -8,7 +7,7 @@ registerEnumType(UserRole, {
 });
 
 @ObjectType()
-export class UserType extends BaseEntity implements IUser {
+export class UserType implements IUser {
   @Field(_type => Int)
   public id: number;
 
