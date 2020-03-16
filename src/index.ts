@@ -1,5 +1,4 @@
 import "./env";
-// eslint-disable-next-line import/default
 import passport from "passport";
 import {NestFactory, Reflector} from "@nestjs/core";
 
@@ -10,7 +9,6 @@ import {JwtGuard, RolesGuard} from "./common/guards";
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(ApplicationModule);
 
-  // eslint-disable-next-line import/namespace
   app.use(passport.initialize());
 
   const reflector = app.get(Reflector);
@@ -18,11 +16,9 @@ async function bootstrap(): Promise<void> {
   app.useGlobalGuards(new RolesGuard(reflector));
 
   await app.listen(process.env.PORT, process.env.HOST, () => {
-    // eslint-disable-next-line no-console
     console.info(`Express server is running on http://${process.env.HOST}:${process.env.PORT}/`);
 
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
       console.info(`GraphQL playground is at http://${process.env.HOST}:${process.env.PORT}/graphql`);
     }
   });

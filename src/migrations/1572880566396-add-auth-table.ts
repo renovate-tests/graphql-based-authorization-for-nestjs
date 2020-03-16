@@ -25,6 +25,22 @@ export class AddAuthTable1572880566396 implements MigrationInterface {
           name: "refresh_token",
           type: "varchar",
         },
+        {
+          name: "refresh_token_expires_at",
+          type: "bigint",
+        },
+        {
+          name: "access_token_expires_at",
+          type: "bigint",
+        },
+        {
+          name: "time_created_at",
+          type: "timestamptz",
+        },
+        {
+          name: "time_updated_at",
+          type: "timestamptz",
+        },
       ],
       foreignKeys: [
         {
@@ -43,7 +59,7 @@ export class AddAuthTable1572880566396 implements MigrationInterface {
       LANGUAGE plpgsql
       AS $$
         BEGIN
-          DELETE FROM test.auth WHERE created_at < NOW() - INTERVAL '30 days';
+          DELETE FROM test.auth WHERE time_created_at < NOW() - INTERVAL '30 days';
           RETURN NEW;
         END;
       $$;

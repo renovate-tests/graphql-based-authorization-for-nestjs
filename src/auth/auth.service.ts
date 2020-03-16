@@ -2,8 +2,7 @@ import {Injectable, UnauthorizedException} from "@nestjs/common";
 import {JwtService} from "@nestjs/jwt";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository, FindConditions, DeleteResult} from "typeorm";
-// eslint-disable-next-line import/default
-import uuid from "uuid";
+import {v4} from "uuid";
 
 import {UserService} from "../user/user.service";
 import {UserEntity} from "../user/user.entity";
@@ -45,13 +44,14 @@ export class AuthService {
   }
 
   public async loginUser(user: UserEntity): Promise<IAuth> {
-    const refreshToken = uuid.v4();
+    const refreshToken = v4();
     const date = new Date();
 
     await this.authEntityRepository
       .create({
         user,
         refreshToken,
+        accessTokenExpiresAt: date.getTime() + accessTokenExpiresIn,
         refreshTokenExpiresAt: date.getTime() + refreshTokenExpiresIn,
       })
       .save();
