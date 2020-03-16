@@ -1,6 +1,5 @@
-import {Field, ObjectType} from "type-graphql";
+import {Field, ObjectType} from "@nestjs/graphql";
 import {UserType} from ".";
-
 
 @ObjectType()
 export class UserListType {

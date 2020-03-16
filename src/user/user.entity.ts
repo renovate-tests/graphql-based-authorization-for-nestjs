@@ -1,5 +1,5 @@
 import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {registerEnumType} from "type-graphql";
+import {registerEnumType} from "@nestjs/graphql";
 import {IUser, UserRole} from "./interfaces";
 
 
