@@ -30,13 +30,13 @@ npm run prod
 
 ## Docker
 
-Otherwise you can use docker 
+Otherwise you can use docker
 
 ```shell script
 docker-compose up --build
 ```
 
-## Usage 
+## Usage
 
 You can log in to the application using **trejgun@gmail.com/My5up3r5tr0ngP@55w0rd** by executing this CURL request
 

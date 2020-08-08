@@ -3,11 +3,11 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {JwtModule} from "@nestjs/jwt";
 
 import {AuthService} from "./auth.service";
-import {JwtStrategy} from "./jwt.strategy";
 import {UserModule} from "../user/user.module";
-import ormconfig from "../ormconfig";
 import {AuthEntity} from "./auth.entity";
 import {accessTokenExpiresIn} from "./auth.constants";
+import {JwtStrategy} from "./strategies";
+import {TypeOrmConfigService} from "../typeorm.options";
 
 
 describe("AuthService", () => {
@@ -16,7 +16,9 @@ describe("AuthService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(ormconfig),
+        TypeOrmModule.forRootAsync({
+          useClass: TypeOrmConfigService,
+        }),
         TypeOrmModule.forFeature([AuthEntity]),
         UserModule,
         JwtModule.register({

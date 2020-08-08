@@ -4,11 +4,10 @@ import {JwtModule} from "@nestjs/jwt";
 import {TypeOrmModule} from "@nestjs/typeorm";
 
 import {AuthService} from "./auth.service";
-import {JwtStrategy} from "./jwt.strategy";
 import {UserModule} from "../user/user.module";
 import {AuthResolver} from "./auth.resolver";
 import {AuthEntity} from "./auth.entity";
-
+import {JwtStrategy} from "./strategies";
 
 @Module({
   imports: [

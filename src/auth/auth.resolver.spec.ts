@@ -4,12 +4,12 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {PassportModule} from "@nestjs/passport";
 
 import {AuthResolver} from "./auth.resolver";
-import ormconfig from "../ormconfig";
 import {AuthEntity} from "./auth.entity";
 import {UserModule} from "../user/user.module";
 import {AuthService} from "./auth.service";
-import {JwtStrategy} from "./jwt.strategy";
 import {accessTokenExpiresIn} from "./auth.constants";
+import {JwtStrategy} from "./strategies";
+import {TypeOrmConfigService} from "../typeorm.options";
 
 
 describe("AuthResolver", () => {
@@ -18,7 +18,9 @@ describe("AuthResolver", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(ormconfig),
+        TypeOrmModule.forRootAsync({
+          useClass: TypeOrmConfigService,
+        }),
         TypeOrmModule.forFeature([AuthEntity]),
         UserModule,
         PassportModule,
